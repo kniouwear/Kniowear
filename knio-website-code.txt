@@ -1,0 +1,3169 @@
+KNIO WEBSITE FINAL SOURCE CODE
+================================================================================
+
+
+================================================================================
+FILE: package.json
+================================================================================
+
+{
+  "name": "nextjs-postgresql-template",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "17.3.1",
+    "drizzle-orm": "0.45.2",
+    "next": "16.2.6",
+    "pg": "8.20.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.17",
+    "@types/node": "22.19.15",
+    "@types/pg": "8.18.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "drizzle-kit": "0.31.10",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.2.6",
+    "postcss": "8.5.8",
+    "tailwindcss": "4.1.17",
+    "typescript": "5.9.3"
+  }
+}
+
+
+================================================================================
+FILE: tsconfig.json
+================================================================================
+
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+
+
+================================================================================
+FILE: next.config.ts
+================================================================================
+
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {};
+
+export default nextConfig;
+
+
+================================================================================
+FILE: postcss.config.mjs
+================================================================================
+
+const postcssConfig = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default postcssConfig;
+
+
+================================================================================
+FILE: eslint.config.mjs
+================================================================================
+
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+
+export default defineConfig([
+  // Keep the starter on the flat config export that actually runs under the pinned ESLint/Next toolchain.
+  ...nextCoreWebVitals,
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+]);
+
+
+================================================================================
+FILE: drizzle.config.json
+================================================================================
+
+{
+  "dialect": "postgresql",
+  "schema": "./src/db/schema.ts",
+  "dbCredentials": {
+    "url": "postgresql://postgres:postgres@127.0.0.1:5432/app_db"
+  }
+}
+
+
+================================================================================
+FILE: .env.example
+================================================================================
+
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+ADMIN_PASSWORD=change-this-admin-password
+
+
+================================================================================
+FILE: .gitignore
+================================================================================
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# env files - never commit secrets
+.env
+.env*.local
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+
+================================================================================
+FILE: README.md
+================================================================================
+
+# KNIO Wear Website
+
+A modern fullstack fashion brand website for **KNIO** with a private admin dashboard, product management, newsletter subscribers, contact messages, and PostgreSQL persistence.
+
+## Live Brand URL
+
+Main store link used across the site:
+
+- https://kniowear.com
+
+## Tech Stack
+
+- Next.js App Router
+- React
+- TypeScript
+- Tailwind CSS
+- PostgreSQL
+- Drizzle ORM
+
+## Features
+
+- Luxury black fashion brand landing page
+- Collections page with managed product archive
+- About page
+- Contact page with database-backed message storage
+- Newsletter subscription API
+- Private admin dashboard
+- Product create/edit/delete
+- Featured products on homepage
+- Contact message management
+- Subscriber list management
+
+## Environment Variables
+
+Create a local `.env` file from `.env.example`:
+
+```bash
+cp .env.example .env
+```
+
+Then set:
+
+```bash
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+ADMIN_PASSWORD=your-secure-admin-password
+```
+
+Never commit `.env` to GitHub.
+
+## Local Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Apply the database schema:
+
+```bash
+npx drizzle-kit push
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+## Admin Dashboard
+
+Admin login page:
+
+```text
+/admin/login
+```
+
+Use the password from the `ADMIN_PASSWORD` environment variable.
+
+From the dashboard you can manage:
+
+- Products
+- Featured homepage products
+- Contact form messages
+- Newsletter subscribers
+
+## Production Build
+
+Generate Next.js route types:
+
+```bash
+npx next typegen
+```
+
+Run TypeScript check:
+
+```bash
+npm exec tsc -- --noEmit --pretty false
+```
+
+Build:
+
+```bash
+npm run build
+```
+
+Start production server:
+
+```bash
+npm run start
+```
+
+## Deploying to Vercel
+
+1. Push the project to GitHub.
+2. Import the GitHub repository into Vercel.
+3. Add these environment variables in Vercel:
+   - `DATABASE_URL`
+   - `ADMIN_PASSWORD`
+4. Deploy.
+5. Run Drizzle schema push against your production database when needed.
+
+## GitHub Push Commands
+
+If this is a new repository:
+
+```bash
+git init
+git add .
+git commit -m "Initial KNIO fashion website"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+git push -u origin main
+```
+
+If the repository already exists locally:
+
+```bash
+git add .
+git commit -m "Update KNIO website"
+git push
+```
+
+## Important Security Notes
+
+- Do not upload `.env`.
+- Change `ADMIN_PASSWORD` before production deployment.
+- Use a managed PostgreSQL database for production.
+- Keep database credentials only in environment variables.
+
+
+================================================================================
+FILE: DEPLOYMENT-FA.md
+================================================================================
+
+# راهنمای نهایی راه‌اندازی و دیپلوی سایت KNIO
+
+این پروژه نسخه کامل سایت برند لباس **KNIO** است و شامل سایت اصلی، پنل مدیریت، فرم تماس، خبرنامه، محصولات قابل مدیریت و دیتابیس PostgreSQL است.
+
+## 1. فایل‌های مهم پروژه
+
+- `src/app/page.tsx` — صفحه اصلی
+- `src/app/collections/page.tsx` — صفحه کالکشن‌ها و محصولات
+- `src/app/about/page.tsx` — صفحه درباره ما
+- `src/app/contact/page.tsx` — صفحه تماس
+- `src/app/admin/page.tsx` — پنل مدیریت
+- `src/app/admin/login/page.tsx` — صفحه ورود ادمین
+- `src/app/api/newsletter/route.ts` — API خبرنامه
+- `src/app/api/contact/route.ts` — API فرم تماس
+- `src/db/schema.ts` — جدول‌های دیتابیس
+- `src/lib/products.ts` — محصولات پیش‌فرض
+- `.env.example` — نمونه متغیرهای محیطی
+
+## 2. اجرای پروژه روی سیستم خودت
+
+ابتدا پروژه را از ZIP خارج کن و داخل پوشه پروژه برو.
+
+نصب پکیج‌ها:
+
+```bash
+npm install
+```
+
+یک فایل `.env` بساز:
+
+```bash
+cp .env.example .env
+```
+
+داخل `.env` مقدارها را تنظیم کن:
+
+```env
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+ADMIN_PASSWORD=your-secure-admin-password
+```
+
+اسکیما را روی دیتابیس اعمال کن:
+
+```bash
+npx drizzle-kit push
+```
+
+اجرای لوکال:
+
+```bash
+npm run dev
+```
+
+آدرس سایت:
+
+```text
+http://localhost:3000
+```
+
+آدرس پنل مدیریت:
+
+```text
+http://localhost:3000/admin/login
+```
+
+رمز ورود همان مقدار `ADMIN_PASSWORD` است.
+
+## 3. آپلود روی GitHub
+
+اگر repository جدید داری:
+
+```bash
+git init
+git add .
+git commit -m "Initial KNIO fashion website"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+git push -u origin main
+```
+
+اگر repository از قبل وصل است:
+
+```bash
+git add .
+git commit -m "Final KNIO website version"
+git push
+```
+
+## 4. دیپلوی روی Vercel
+
+1. پروژه را روی GitHub بفرست.
+2. وارد Vercel شو.
+3. گزینه Import Project را بزن.
+4. repository سایت KNIO را انتخاب کن.
+5. در بخش Environment Variables این دو مقدار را وارد کن:
+
+```text
+DATABASE_URL
+ADMIN_PASSWORD
+```
+
+6. Deploy را بزن.
+
+## 5. نکته مهم امنیتی
+
+این فایل‌ها را هرگز روی GitHub نگذار:
+
+- `.env`
+- `node_modules`
+- `.next`
+
+داخل پروژه `.gitignore` تنظیم شده تا این فایل‌ها آپلود نشوند.
+
+## 6. مدیریت سایت
+
+بعد از دیپلوی، وارد این مسیر شو:
+
+```text
+https://YOUR_DOMAIN.com/admin/login
+```
+
+از پنل مدیریت می‌توانی:
+
+- محصول اضافه کنی
+- محصول را ویرایش کنی
+- محصول را حذف کنی
+- محصول Featured برای صفحه اصلی انتخاب کنی
+- پیام‌های تماس را ببینی
+- ایمیل‌های خبرنامه را ببینی
+
+## 7. اتصال دامنه kniowear.com
+
+اگر روی Vercel دیپلوی کردی:
+
+1. وارد پروژه در Vercel شو.
+2. از Settings وارد Domains شو.
+3. دامنه `kniowear.com` را اضافه کن.
+4. DNSهایی که Vercel می‌دهد را در پنل دامنه‌ات تنظیم کن.
+5. بعد از فعال شدن DNS، سایت روی دامنه اصلی بالا می‌آید.
+
+## 8. چک نهایی قبل از دیپلوی
+
+```bash
+npx next typegen
+npm exec tsc -- --noEmit --pretty false
+npm run build
+```
+
+اگر هر سه دستور بدون خطا اجرا شدند، پروژه آماده دیپلوی است.
+
+
+================================================================================
+FILE: src/app/about/page.tsx
+================================================================================
+
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About — KNIO",
+  description: "The story behind KNIO. Learn about our mission, values, and the vision that drives every piece we create.",
+};
+
+const values = [
+  {
+    title: "Minimalism",
+    description: "We believe in the power of less. Every design element serves a purpose, every detail is intentional.",
+    icon: (
+      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={0.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Quality",
+    description: "Premium materials, expert craftsmanship. Each piece is made to stand the test of time and wear.",
+    icon: (
+      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={0.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Expression",
+    description: "Fashion is personal. We create pieces that let you express who you are without saying a word.",
+    icon: (
+      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={0.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+      </svg>
+    ),
+  },
+  {
+    title: "Sustainability",
+    description: "Responsible fashion is our commitment. Ethical sourcing, sustainable practices, mindful production.",
+    icon: (
+      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={0.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+  },
+];
+
+const timeline = [
+  { year: "2021", event: "KNIO founded with a vision to blend minimalism and bold fashion" },
+  { year: "2022", event: "First collection launched — 'Origins' receives critical acclaim" },
+  { year: "2023", event: "Expanded to 20+ countries, launched Streetwear line" },
+  { year: "2024", event: "Noir collection debuts at fashion week, global recognition" },
+  { year: "2025", event: "Avant-Garde collection pushes creative boundaries" },
+  { year: "2026", event: "New era — FW26 collection, kniowear.com relaunch" },
+];
+
+export default function AboutPage() {
+  return (
+    <>
+      <Navbar />
+
+      {/* Hero */}
+      <section className="relative min-h-[80vh] flex items-center overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="https://images.pexels.com/photos/20235870/pexels-photo-20235870.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=1600"
+            alt="KNIO About"
+            className="w-full h-full object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/40" />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-20">
+          <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-6">
+            Our Story
+          </p>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.95]">
+            Born from
+            <br />
+            <span className="text-white/40">the desire</span>
+            <br />
+            to be different.
+          </h1>
+        </div>
+      </section>
+
+      {/* Story Section */}
+      <section className="py-32 px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+            <div>
+              <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-6">
+                The Beginning
+              </p>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8 leading-tight">
+                KNIO started as a question: what if clothing could be both minimal and bold?
+              </h2>
+              <div className="space-y-6 text-base font-light text-white/50 leading-relaxed">
+                <p>
+                  In a world of fast fashion and fleeting trends, we wanted to create something 
+                  different. Something that respects the individual, honors quality materials, 
+                  and speaks through design rather than logos.
+                </p>
+                <p>
+                  Every KNIO piece begins with a feeling — the confidence of wearing something 
+                  that truly fits who you are. From there, our designers work to translate that 
+                  feeling into fabric, form, and function.
+                </p>
+                <p>
+                  Today, KNIO serves fashion-forward individuals across 50+ countries, 
+                  but our mission remains the same: to create clothing that lets you 
+                  express yourself without compromise.
+                </p>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="aspect-[4/5] overflow-hidden">
+                <img
+                  src="https://images.pexels.com/photos/7871152/pexels-photo-7871152.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700"
+                  alt="KNIO brand story"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-6 -left-6 bg-white text-black p-8 max-w-[200px]">
+                <p className="text-3xl font-bold">2021</p>
+                <p className="text-[11px] tracking-ultra uppercase mt-1 text-black/50">Founded</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="py-32 px-6 lg:px-10 bg-white/[0.02]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-4">
+              What We Stand For
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Our Values</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            {values.map((value) => (
+              <div key={value.title} className="text-center group">
+                <div className="text-white/30 group-hover:text-white transition-colors duration-500 mb-6 flex justify-center">
+                  {value.icon}
+                </div>
+                <h3 className="text-lg font-semibold tracking-wide mb-3">{value.title}</h3>
+                <p className="text-sm font-light text-white/40 leading-relaxed">
+                  {value.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section className="py-32 px-6 lg:px-10">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-20">
+            <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-4">
+              Our Journey
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Timeline</h2>
+          </div>
+
+          <div className="relative">
+            {/* Line */}
+            <div className="absolute left-[23px] top-0 bottom-0 w-[1px] bg-white/10" />
+
+            <div className="space-y-12">
+              {timeline.map((item) => (
+                <div key={item.year} className="flex gap-8 items-start group">
+                  <div className="relative flex-shrink-0">
+                    <div className="w-12 h-12 border border-white/20 group-hover:border-white flex items-center justify-center transition-colors duration-500">
+                      <div className="w-2 h-2 bg-white/30 group-hover:bg-white transition-colors duration-500" />
+                    </div>
+                  </div>
+                  <div className="pt-2">
+                    <p className="text-2xl font-bold mb-2">{item.year}</p>
+                    <p className="text-sm font-light text-white/50 leading-relaxed">
+                      {item.event}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quote Section */}
+      <section className="py-32 px-6 lg:px-10 border-y border-white/10">
+        <div className="max-w-4xl mx-auto text-center">
+          <svg className="w-10 h-10 mx-auto text-white/20 mb-8" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+          </svg>
+          <blockquote className="text-3xl md:text-4xl font-light leading-relaxed tracking-tight">
+            &ldquo;We don&apos;t follow trends. We create a language of style that speaks to 
+            the individual — bold, minimal, and unapologetically authentic.&rdquo;
+          </blockquote>
+          <p className="mt-8 text-[11px] tracking-ultra uppercase text-white/40">
+            KNIO Design Team
+          </p>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-32 px-6 text-center">
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+          Join the movement.
+        </h2>
+        <p className="text-base font-light text-white/50 mb-10 max-w-md mx-auto">
+          Discover what KNIO can do for your wardrobe.
+        </p>
+        <a
+          href="https://kniowear.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-white text-black px-12 py-4 text-[13px] font-medium tracking-wide-custom uppercase hover:bg-white/90 transition-colors duration-300"
+        >
+          Shop at kniowear.com
+        </a>
+      </section>
+
+      <Footer />
+    </>
+  );
+}
+
+
+================================================================================
+FILE: src/app/admin/actions.ts
+================================================================================
+
+"use server";
+
+import { db } from "@/db";
+import { contactMessages, products, subscribers } from "@/db/schema";
+import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
+async function requireAdmin() {
+  const authenticated = await isAdminAuthenticated();
+  if (!authenticated) redirect("/admin/login");
+}
+
+function stringValue(formData: FormData, key: string) {
+  return String(formData.get(key) || "").trim();
+}
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function parseId(formData: FormData) {
+  const id = Number(formData.get("id"));
+  if (!Number.isInteger(id) || id <= 0) throw new Error("Invalid ID");
+  return id;
+}
+
+function parseProductPayload(formData: FormData) {
+  const name = stringValue(formData, "name");
+  const slugInput = stringValue(formData, "slug");
+  const description = stringValue(formData, "description");
+  const category = stringValue(formData, "category");
+  const imageUrl = stringValue(formData, "imageUrl");
+  const price = Number(stringValue(formData, "price"));
+  const featured = formData.get("featured") === "on";
+
+  if (!name || !description || !category || !imageUrl) {
+    throw new Error("Product fields are required");
+  }
+
+  if (!Number.isFinite(price) || price < 0) {
+    throw new Error("Invalid price");
+  }
+
+  return {
+    name,
+    slug: slugInput ? slugify(slugInput) : slugify(name),
+    description,
+    price: Math.round(price),
+    category,
+    imageUrl,
+    featured,
+  };
+}
+
+export async function createProduct(formData: FormData) {
+  await requireAdmin();
+  const payload = parseProductPayload(formData);
+
+  await db.insert(products).values(payload).onConflictDoUpdate({
+    target: products.slug,
+    set: {
+      name: payload.name,
+      description: payload.description,
+      price: payload.price,
+      category: payload.category,
+      imageUrl: payload.imageUrl,
+      featured: payload.featured,
+    },
+  });
+
+  revalidatePath("/admin");
+  revalidatePath("/collections");
+  revalidatePath("/");
+}
+
+export async function updateProduct(formData: FormData) {
+  await requireAdmin();
+  const id = parseId(formData);
+  const payload = parseProductPayload(formData);
+
+  await db.update(products).set(payload).where(eq(products.id, id));
+
+  revalidatePath("/admin");
+  revalidatePath("/collections");
+  revalidatePath("/");
+}
+
+export async function deleteProduct(formData: FormData) {
+  await requireAdmin();
+  const id = parseId(formData);
+
+  await db.delete(products).where(eq(products.id, id));
+
+  revalidatePath("/admin");
+  revalidatePath("/collections");
+  revalidatePath("/");
+}
+
+export async function markMessageRead(formData: FormData) {
+  await requireAdmin();
+  const id = parseId(formData);
+
+  await db.update(contactMessages).set({ read: true }).where(eq(contactMessages.id, id));
+
+  revalidatePath("/admin");
+}
+
+export async function deleteMessage(formData: FormData) {
+  await requireAdmin();
+  const id = parseId(formData);
+
+  await db.delete(contactMessages).where(eq(contactMessages.id, id));
+
+  revalidatePath("/admin");
+}
+
+export async function deleteSubscriber(formData: FormData) {
+  await requireAdmin();
+  const id = parseId(formData);
+
+  await db.delete(subscribers).where(eq(subscribers.id, id));
+
+  revalidatePath("/admin");
+}
+
+
+================================================================================
+FILE: src/app/admin/login/page.tsx
+================================================================================
+
+import AdminLoginForm from "@/components/admin/AdminLoginForm";
+import { isAdminAuthenticated, isAdminConfigured } from "@/lib/admin-auth";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+
+export const metadata = {
+  title: "Admin Login — KNIO",
+};
+
+export default async function AdminLoginPage() {
+  if (await isAdminAuthenticated()) redirect("/admin");
+
+  return (
+    <main className="min-h-screen bg-black text-white flex items-center justify-center px-6 py-16">
+      <div className="w-full max-w-md">
+        <Link href="/" className="inline-block text-2xl font-bold tracking-ultra uppercase mb-10">
+          KNIO
+        </Link>
+
+        <div className="border border-white/10 p-8 md:p-10 bg-white/[0.02]">
+          <p className="text-[11px] font-light tracking-ultra uppercase text-white/35 mb-4">
+            Private Area
+          </p>
+          <h1 className="text-3xl font-bold tracking-tight mb-3">Admin Login</h1>
+          <p className="text-sm font-light text-white/45 leading-relaxed mb-8">
+            Enter your admin password to manage products, newsletter subscribers, and contact messages.
+          </p>
+
+          {isAdminConfigured() ? (
+            <AdminLoginForm />
+          ) : (
+            <div className="border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-200 leading-relaxed">
+              ADMIN_PASSWORD is not configured. Add it to your environment variables first.
+            </div>
+          )}
+        </div>
+
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 mt-8 text-[12px] tracking-wide-custom uppercase text-white/40 hover:text-white transition-colors"
+        >
+          ← Back to website
+        </Link>
+      </div>
+    </main>
+  );
+}
+
+
+================================================================================
+FILE: src/app/admin/page.tsx
+================================================================================
+
+import LogoutButton from "@/components/admin/LogoutButton";
+import { db } from "@/db";
+import { contactMessages, subscribers } from "@/db/schema";
+import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { getManagedProducts } from "@/lib/products";
+import { desc } from "drizzle-orm";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import {
+  createProduct,
+  deleteMessage,
+  deleteProduct,
+  deleteSubscriber,
+  markMessageRead,
+  updateProduct,
+} from "./actions";
+import type { ReactNode } from "react";
+
+export const dynamic = "force-dynamic";
+
+export const metadata = {
+  title: "Admin Dashboard — KNIO",
+};
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat("en", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  }).format(date);
+}
+
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <label className="block">
+      <span className="block text-[10px] font-medium tracking-ultra uppercase text-white/30 mb-2">
+        {label}
+      </span>
+      {children}
+    </label>
+  );
+}
+
+const inputClass =
+  "w-full bg-black border border-white/15 px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-white/50 transition-colors";
+
+export default async function AdminDashboardPage() {
+  if (!(await isAdminAuthenticated())) redirect("/admin/login");
+
+  const [managedProducts, newsletterSubscribers, messages] = await Promise.all([
+    getManagedProducts(),
+    db.select().from(subscribers).orderBy(desc(subscribers.createdAt)),
+    db.select().from(contactMessages).orderBy(desc(contactMessages.createdAt)),
+  ]);
+
+  const unreadMessages = messages.filter((message) => !message.read).length;
+  const featuredProducts = managedProducts.filter((product) => product.featured).length;
+
+  return (
+    <main className="min-h-screen bg-black text-white">
+      {/* Header */}
+      <header className="border-b border-white/10 sticky top-0 z-40 bg-black/85 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <Link href="/" className="text-2xl font-bold tracking-ultra uppercase">
+              KNIO
+            </Link>
+            <span className="hidden sm:inline-block text-[11px] tracking-ultra uppercase text-white/25">
+              Admin Dashboard
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="border border-white/15 px-4 py-2 text-[11px] font-medium tracking-wide-custom uppercase text-white/60 hover:text-white hover:border-white/40 transition-colors"
+            >
+              View Site
+            </Link>
+            <LogoutButton />
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-12">
+        {/* Intro */}
+        <section className="mb-12">
+          <p className="text-[11px] font-light tracking-ultra uppercase text-white/35 mb-4">
+            Website Management
+          </p>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Control Room</h1>
+          <p className="mt-4 text-sm font-light text-white/45 max-w-xl leading-relaxed">
+            Manage visible products, review customer messages, and export newsletter contacts from one private dashboard.
+          </p>
+        </section>
+
+        {/* Stats */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+          {[
+            { label: "Products", value: managedProducts.length },
+            { label: "Featured", value: featuredProducts },
+            { label: "Subscribers", value: newsletterSubscribers.length },
+            { label: "Unread Messages", value: unreadMessages },
+          ].map((stat) => (
+            <div key={stat.label} className="border border-white/10 p-6 bg-white/[0.02]">
+              <p className="text-[10px] tracking-ultra uppercase text-white/30 mb-3">{stat.label}</p>
+              <p className="text-4xl font-bold">{stat.value}</p>
+            </div>
+          ))}
+        </section>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          {/* Product Manager */}
+          <section className="xl:col-span-2 space-y-8">
+            <div className="border border-white/10 bg-white/[0.02] p-6 md:p-8">
+              <div className="flex items-start justify-between gap-6 mb-8">
+                <div>
+                  <p className="text-[10px] tracking-ultra uppercase text-white/30 mb-3">Catalog</p>
+                  <h2 className="text-2xl font-bold tracking-tight">Add Product</h2>
+                </div>
+                <Link
+                  href="/collections"
+                  className="text-[11px] tracking-wide-custom uppercase text-white/40 hover:text-white transition-colors"
+                >
+                  Public Page →
+                </Link>
+              </div>
+
+              <form action={createProduct} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <Field label="Name">
+                  <input name="name" required placeholder="Essential Tee" className={inputClass} />
+                </Field>
+                <Field label="Slug">
+                  <input name="slug" placeholder="essential-tee" className={inputClass} />
+                </Field>
+                <Field label="Category">
+                  <input name="category" required placeholder="Essentials" className={inputClass} />
+                </Field>
+                <Field label="Price (€)">
+                  <input name="price" required type="number" min="0" placeholder="95" className={inputClass} />
+                </Field>
+                <div className="md:col-span-2">
+                  <Field label="Image URL">
+                    <input name="imageUrl" required placeholder="https://..." className={inputClass} />
+                  </Field>
+                </div>
+                <div className="md:col-span-2">
+                  <Field label="Description">
+                    <textarea
+                      name="description"
+                      required
+                      rows={3}
+                      placeholder="Describe the product..."
+                      className={`${inputClass} resize-none`}
+                    />
+                  </Field>
+                </div>
+                <label className="flex items-center gap-3 text-sm text-white/60">
+                  <input name="featured" type="checkbox" className="accent-white" />
+                  Feature this product on homepage
+                </label>
+                <div className="md:text-right">
+                  <button className="w-full md:w-auto bg-white text-black px-8 py-3 text-[12px] font-medium tracking-wide-custom uppercase hover:bg-white/90 transition-colors">
+                    Add Product
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div className="border border-white/10 bg-white/[0.02] p-6 md:p-8">
+              <div className="mb-8">
+                <p className="text-[10px] tracking-ultra uppercase text-white/30 mb-3">Live Catalog</p>
+                <h2 className="text-2xl font-bold tracking-tight">Manage Products</h2>
+              </div>
+
+              <div className="space-y-5">
+                {managedProducts.map((product) => (
+                  <details key={product.id} className="group border border-white/10 bg-black">
+                    <summary className="cursor-pointer list-none p-4 md:p-5 flex gap-4 items-center justify-between">
+                      <div className="flex items-center gap-4 min-w-0">
+                        <img
+                          src={product.imageUrl}
+                          alt={product.name}
+                          className="w-16 h-20 object-cover bg-white/5 flex-shrink-0"
+                        />
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-2 mb-1">
+                            <h3 className="font-semibold truncate">{product.name}</h3>
+                            {product.featured && (
+                              <span className="text-[9px] tracking-wide-custom uppercase bg-white text-black px-2 py-1">
+                                Featured
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm text-white/40">
+                            {product.category} · €{product.price}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-white/35 group-open:rotate-45 transition-transform text-2xl">+</span>
+                    </summary>
+
+                    <div className="border-t border-white/10 p-4 md:p-5">
+                      <form action={updateProduct} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <input type="hidden" name="id" value={product.id} />
+                        <Field label="Name">
+                          <input name="name" defaultValue={product.name} required className={inputClass} />
+                        </Field>
+                        <Field label="Slug">
+                          <input name="slug" defaultValue={product.slug} required className={inputClass} />
+                        </Field>
+                        <Field label="Category">
+                          <input name="category" defaultValue={product.category} required className={inputClass} />
+                        </Field>
+                        <Field label="Price (€)">
+                          <input name="price" defaultValue={product.price} required type="number" min="0" className={inputClass} />
+                        </Field>
+                        <div className="md:col-span-2">
+                          <Field label="Image URL">
+                            <input name="imageUrl" defaultValue={product.imageUrl} required className={inputClass} />
+                          </Field>
+                        </div>
+                        <div className="md:col-span-2">
+                          <Field label="Description">
+                            <textarea
+                              name="description"
+                              defaultValue={product.description}
+                              required
+                              rows={3}
+                              className={`${inputClass} resize-none`}
+                            />
+                          </Field>
+                        </div>
+                        <label className="flex items-center gap-3 text-sm text-white/60">
+                          <input
+                            name="featured"
+                            type="checkbox"
+                            defaultChecked={product.featured}
+                            className="accent-white"
+                          />
+                          Feature on homepage
+                        </label>
+                        <div className="flex flex-col sm:flex-row gap-3 md:justify-end">
+                          <button className="bg-white text-black px-6 py-3 text-[12px] font-medium tracking-wide-custom uppercase hover:bg-white/90 transition-colors">
+                            Save Changes
+                          </button>
+                        </div>
+                      </form>
+
+                      <form action={deleteProduct} className="mt-3 text-right">
+                        <input type="hidden" name="id" value={product.id} />
+                        <button className="text-[12px] tracking-wide-custom uppercase text-red-300/70 hover:text-red-300 transition-colors">
+                          Delete Product
+                        </button>
+                      </form>
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Side Panels */}
+          <aside className="space-y-8">
+            {/* Messages */}
+            <section className="border border-white/10 bg-white/[0.02] p-6">
+              <div className="mb-6">
+                <p className="text-[10px] tracking-ultra uppercase text-white/30 mb-3">Inbox</p>
+                <h2 className="text-2xl font-bold tracking-tight">Messages</h2>
+              </div>
+
+              <div className="space-y-4 max-h-[680px] overflow-auto pr-1">
+                {messages.length === 0 ? (
+                  <p className="text-sm text-white/35">No contact messages yet.</p>
+                ) : (
+                  messages.map((message) => (
+                    <div key={message.id} className="border border-white/10 p-4 bg-black">
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        <div>
+                          <h3 className="font-semibold">{message.name}</h3>
+                          <p className="text-xs text-white/35">{message.email}</p>
+                        </div>
+                        <span
+                          className={`text-[9px] tracking-wide-custom uppercase px-2 py-1 ${
+                            message.read ? "bg-white/10 text-white/35" : "bg-white text-black"
+                          }`}
+                        >
+                          {message.read ? "Read" : "New"}
+                        </span>
+                      </div>
+                      <p className="text-sm font-medium mb-2">{message.subject}</p>
+                      <p className="text-sm text-white/45 leading-relaxed mb-4">{message.message}</p>
+                      <p className="text-[11px] text-white/25 mb-4">{formatDate(message.createdAt)}</p>
+                      <div className="flex gap-4">
+                        {!message.read && (
+                          <form action={markMessageRead}>
+                            <input type="hidden" name="id" value={message.id} />
+                            <button className="text-[11px] tracking-wide-custom uppercase text-white/45 hover:text-white transition-colors">
+                              Mark Read
+                            </button>
+                          </form>
+                        )}
+                        <form action={deleteMessage}>
+                          <input type="hidden" name="id" value={message.id} />
+                          <button className="text-[11px] tracking-wide-custom uppercase text-red-300/60 hover:text-red-300 transition-colors">
+                            Delete
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </section>
+
+            {/* Subscribers */}
+            <section className="border border-white/10 bg-white/[0.02] p-6">
+              <div className="mb-6">
+                <p className="text-[10px] tracking-ultra uppercase text-white/30 mb-3">Newsletter</p>
+                <h2 className="text-2xl font-bold tracking-tight">Subscribers</h2>
+              </div>
+
+              {newsletterSubscribers.length > 0 && (
+                <textarea
+                  readOnly
+                  value={newsletterSubscribers.map((subscriber) => subscriber.email).join(", ")}
+                  className="w-full h-24 bg-black border border-white/10 p-3 text-xs text-white/35 resize-none mb-5 focus:outline-none"
+                  aria-label="Subscriber export list"
+                />
+              )}
+
+              <div className="space-y-3 max-h-[360px] overflow-auto pr-1">
+                {newsletterSubscribers.length === 0 ? (
+                  <p className="text-sm text-white/35">No subscribers yet.</p>
+                ) : (
+                  newsletterSubscribers.map((subscriber) => (
+                    <div key={subscriber.id} className="flex items-center justify-between gap-3 border border-white/10 bg-black p-3">
+                      <div className="min-w-0">
+                        <p className="text-sm truncate">{subscriber.email}</p>
+                        <p className="text-[11px] text-white/25">{formatDate(subscriber.createdAt)}</p>
+                      </div>
+                      <form action={deleteSubscriber}>
+                        <input type="hidden" name="id" value={subscriber.id} />
+                        <button className="text-[10px] tracking-wide-custom uppercase text-red-300/60 hover:text-red-300 transition-colors">
+                          Remove
+                        </button>
+                      </form>
+                    </div>
+                  ))
+                )}
+              </div>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+
+================================================================================
+FILE: src/app/api/admin/login/route.ts
+================================================================================
+
+import {
+  ADMIN_COOKIE_NAME,
+  adminCookieOptions,
+  createAdminSessionToken,
+  isAdminConfigured,
+  verifyAdminPassword,
+} from "@/lib/admin-auth";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function POST(req: NextRequest) {
+  try {
+    if (!isAdminConfigured()) {
+      return NextResponse.json(
+        { error: "Admin password is not configured." },
+        { status: 503 }
+      );
+    }
+
+    const body = await req.json();
+    const password = typeof body.password === "string" ? body.password : "";
+
+    if (!verifyAdminPassword(password)) {
+      return NextResponse.json({ error: "Invalid password." }, { status: 401 });
+    }
+
+    const res = NextResponse.json({ ok: true });
+    res.cookies.set(ADMIN_COOKIE_NAME, createAdminSessionToken(), adminCookieOptions);
+    return res;
+  } catch {
+    return NextResponse.json({ error: "Login failed." }, { status: 500 });
+  }
+}
+
+
+================================================================================
+FILE: src/app/api/admin/logout/route.ts
+================================================================================
+
+import { ADMIN_COOKIE_NAME } from "@/lib/admin-auth";
+import { NextResponse } from "next/server";
+
+export async function POST() {
+  const res = NextResponse.json({ ok: true });
+  res.cookies.set(ADMIN_COOKIE_NAME, "", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 0,
+  });
+  return res;
+}
+
+
+================================================================================
+FILE: src/app/api/contact/route.ts
+================================================================================
+
+import { db } from "@/db";
+import { contactMessages } from "@/db/schema";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { name, email, subject, message } = body;
+
+    if (!name || !email || !subject || !message) {
+      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
+    }
+
+    await db.insert(contactMessages).values({
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
+      subject: subject.trim(),
+      message: message.trim(),
+    });
+
+    return NextResponse.json({ message: "Message sent successfully! We'll get back to you soon." }, { status: 201 });
+  } catch {
+    return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
+  }
+}
+
+
+================================================================================
+FILE: src/app/api/health/route.ts
+================================================================================
+
+import { db } from "@/db";
+import { sql } from "drizzle-orm";
+
+export const dynamic = "force-dynamic";
+
+export async function GET() {
+  try {
+    await db.execute(sql`select 1`);
+    return Response.json({ ok: true });
+  } catch {
+    return Response.json({ ok: false }, { status: 500 });
+  }
+}
+
+
+================================================================================
+FILE: src/app/api/newsletter/route.ts
+================================================================================
+
+import { db } from "@/db";
+import { subscribers } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { email } = body;
+
+    if (!email || typeof email !== "string") {
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
+    }
+
+    // Check if already subscribed
+    const existing = await db
+      .select()
+      .from(subscribers)
+      .where(eq(subscribers.email, email.toLowerCase()))
+      .limit(1);
+
+    if (existing.length > 0) {
+      return NextResponse.json({ message: "You're already part of the KNIO family!" }, { status: 200 });
+    }
+
+    await db.insert(subscribers).values({
+      email: email.toLowerCase(),
+    });
+
+    return NextResponse.json({ message: "Welcome to the KNIO family!" }, { status: 201 });
+  } catch {
+    return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
+  }
+}
+
+
+================================================================================
+FILE: src/app/collections/page.tsx
+================================================================================
+
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { getManagedProducts } from "@/lib/products";
+import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Collections — KNIO",
+  description: "Explore KNIO collections. From essentials to avant-garde, discover clothing that speaks for itself.",
+};
+
+const collections = [
+  {
+    id: "essentials",
+    title: "Essentials",
+    subtitle: "Core Wardrobe — Timeless pieces",
+    description:
+      "The foundation of every wardrobe. Clean lines, premium fabrics, and versatile designs that work from dawn to dusk. Built to last, designed to impress.",
+    image: "https://images.pexels.com/photos/6592254/pexels-photo-6592254.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700",
+    products: [
+      {
+        name: "Essential Tee",
+        price: "€65",
+        image: "https://images.pexels.com/photos/7760558/pexels-photo-7760558.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=450",
+      },
+      {
+        name: "Slim Trousers",
+        price: "€120",
+        image: "https://images.pexels.com/photos/10228182/pexels-photo-10228182.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=450",
+      },
+    ],
+  },
+  {
+    id: "streetwear",
+    title: "Streetwear",
+    subtitle: "Urban Edge — Bold statements",
+    description:
+      "Where street culture meets high fashion. Oversized fits, graphic prints, and unexpected textures. For those who own the sidewalk.",
+    image: "https://images.pexels.com/photos/11317811/pexels-photo-11317811.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700",
+    products: [
+      {
+        name: "Oversized Hoodie",
+        price: "€95",
+        image: "https://images.pexels.com/photos/2081435/pexels-photo-2081435.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=450",
+      },
+      {
+        name: "Cargo Pants",
+        price: "€140",
+        image: "https://images.pexels.com/photos/31207606/pexels-photo-31207606.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=450",
+      },
+    ],
+  },
+  {
+    id: "noir",
+    title: "Noir",
+    subtitle: "Dark Elegance — After dark",
+    description:
+      "Embrace the darkness. All-black everything with subtle details that reveal themselves in movement. For the ones who speak in whispers.",
+    image: "https://images.pexels.com/photos/8427591/pexels-photo-8427591.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    products: [
+      {
+        name: "Shadow Jacket",
+        price: "€210",
+        image: "https://images.pexels.com/photos/38023947/pexels-photo-38023947.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=450",
+      },
+      {
+        name: "Noir Dress",
+        price: "€180",
+        image: "https://images.pexels.com/photos/16575981/pexels-photo-16575981.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=450",
+      },
+    ],
+  },
+  {
+    id: "avant-garde",
+    title: "Avant-Garde",
+    subtitle: "Beyond Boundaries — Experimental",
+    description:
+      "Push the boundaries of convention. Architectural silhouettes, deconstructed forms, and bold experimentation. For the fearless.",
+    image: "https://images.pexels.com/photos/29221325/pexels-photo-29221325.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700",
+    products: [
+      {
+        name: "Decon Coat",
+        price: "€320",
+        image: "https://images.pexels.com/photos/10596845/pexels-photo-10596845.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=450",
+      },
+      {
+        name: "Sculptural Top",
+        price: "€175",
+        image: "https://images.pexels.com/photos/7871152/pexels-photo-7871152.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=450",
+      },
+    ],
+  },
+];
+
+export default async function CollectionsPage() {
+  const managedProducts = await getManagedProducts();
+
+  return (
+    <>
+      <Navbar />
+
+      {/* Hero */}
+      <section className="relative pt-32 pb-20 px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-4">
+            FW26
+          </p>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+            Collections
+          </h1>
+          <p className="mt-6 text-lg font-light text-white/50 max-w-lg">
+            Four distinct worlds, one shared vision. Explore the full range of KNIO.
+          </p>
+        </div>
+      </section>
+
+      {/* Collections */}
+      {collections.map((collection, index) => (
+        <section
+          key={collection.id}
+          id={collection.id}
+          className={`py-24 px-6 lg:px-10 ${
+            index % 2 === 0 ? "" : "bg-white/[0.02]"
+          }`}
+        >
+          <div className="max-w-7xl mx-auto">
+            <div
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-center ${
+                index % 2 === 1 ? "lg:flex-row-reverse" : ""
+              }`}
+            >
+              {/* Image */}
+              <div className={`${index % 2 === 1 ? "lg:order-2" : ""}`}>
+                <div className="relative aspect-[3/4] overflow-hidden img-zoom">
+                  <img
+                    src={collection.image}
+                    alt={collection.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className={`${index % 2 === 1 ? "lg:order-1" : ""}`}>
+                <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-4">
+                  {collection.subtitle}
+                </p>
+                <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+                  {collection.title}
+                </h2>
+                <p className="text-base font-light text-white/50 leading-relaxed mb-10 max-w-md">
+                  {collection.description}
+                </p>
+
+                {/* Product Previews */}
+                <div className="grid grid-cols-2 gap-4 mb-8">
+                  {collection.products.map((product) => (
+                    <div key={product.name} className="group cursor-pointer">
+                      <div className="aspect-[3/4] overflow-hidden mb-3 img-zoom">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <p className="text-sm font-medium">{product.name}</p>
+                      <p className="text-sm text-white/40">{product.price}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <a
+                  href="https://kniowear.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 text-[13px] font-light tracking-wide-custom uppercase text-white/60 hover:text-white transition-colors group"
+                >
+                  <span>Shop {collection.title}</span>
+                  <svg
+                    className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
+
+      {/* Managed Shop Archive */}
+      <section id="shop" className="py-32 px-6 lg:px-10 border-y border-white/10">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-16">
+            <div>
+              <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-4">Managed Catalog</p>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Shop Archive</h2>
+            </div>
+            <a
+              href="https://kniowear.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 md:mt-0 text-[13px] font-light tracking-wide-custom uppercase text-white/50 hover:text-white transition-colors border-b border-white/20 hover:border-white pb-1"
+            >
+              Checkout on kniowear.com
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {managedProducts.map((product) => (
+              <a
+                key={product.id}
+                href="https://kniowear.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block"
+              >
+                <div className="aspect-[3/4] overflow-hidden img-zoom bg-white/5 mb-4">
+                  <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                </div>
+                <div className="flex items-start justify-between gap-4 mb-3">
+                  <div>
+                    <p className="text-[10px] tracking-ultra uppercase text-white/35 mb-2">{product.category}</p>
+                    <h3 className="text-base font-medium group-hover:text-white/70 transition-colors">{product.name}</h3>
+                  </div>
+                  <p className="text-sm text-white/50">€{product.price}</p>
+                </div>
+                <p className="text-sm font-light text-white/40 leading-relaxed line-clamp-2">
+                  {product.description}
+                </p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-32 px-6 text-center">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+            Ready to redefine your style?
+          </h2>
+          <p className="text-base font-light text-white/50 mb-10">
+            Visit our online store to explore the full catalog and find your perfect pieces.
+          </p>
+          <a
+            href="https://kniowear.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-white text-black px-12 py-4 text-[13px] font-medium tracking-wide-custom uppercase hover:bg-white/90 transition-colors duration-300"
+          >
+            Shop at kniowear.com
+          </a>
+        </div>
+      </section>
+
+      <Footer />
+    </>
+  );
+}
+
+
+================================================================================
+FILE: src/app/contact/page.tsx
+================================================================================
+
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import ContactForm from "@/components/ContactForm";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact — KNIO",
+  description: "Get in touch with KNIO. We'd love to hear from you — questions, collaborations, or just to say hello.",
+};
+
+export default function ContactPage() {
+  return (
+    <>
+      <Navbar />
+
+      {/* Hero */}
+      <section className="pt-32 pb-12 px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-4">
+            Get in Touch
+          </p>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+            Contact
+          </h1>
+          <p className="mt-6 text-lg font-light text-white/50 max-w-lg">
+            Have a question, idea, or collaboration in mind? We&apos;d love to hear from you.
+          </p>
+        </div>
+      </section>
+
+      {/* Content */}
+      <section className="py-20 px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-20">
+            {/* Contact Info */}
+            <div className="lg:col-span-1 space-y-12">
+              <div>
+                <h3 className="text-[11px] font-semibold tracking-ultra uppercase text-white/30 mb-4">
+                  Email
+                </h3>
+                <p className="text-lg font-light">info@kniowear.com</p>
+              </div>
+
+              <div>
+                <h3 className="text-[11px] font-semibold tracking-ultra uppercase text-white/30 mb-4">
+                  Website
+                </h3>
+                <a
+                  href="https://kniowear.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lg font-light hover:text-white/70 transition-colors"
+                >
+                  kniowear.com
+                </a>
+              </div>
+
+              <div>
+                <h3 className="text-[11px] font-semibold tracking-ultra uppercase text-white/30 mb-4">
+                  Follow Us
+                </h3>
+                <div className="space-y-3">
+                  {["Instagram", "Twitter / X", "TikTok"].map((platform) => (
+                    <a
+                      key={platform}
+                      href="#"
+                      className="block text-base font-light text-white/50 hover:text-white transition-colors"
+                    >
+                      {platform}
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-[11px] font-semibold tracking-ultra uppercase text-white/30 mb-4">
+                  For Press & Media
+                </h3>
+                <p className="text-sm font-light text-white/50 leading-relaxed">
+                  For press inquiries, media kits, and collaboration requests, 
+                  please use the contact form or email us directly.
+                </p>
+              </div>
+            </div>
+
+            {/* Contact Form */}
+            <div className="lg:col-span-2">
+              <div className="border border-white/10 p-8 md:p-12">
+                <h2 className="text-2xl font-bold tracking-tight mb-2">Send us a message</h2>
+                <p className="text-sm font-light text-white/40 mb-10">
+                  Fill out the form below and we&apos;ll get back to you within 24 hours.
+                </p>
+                <ContactForm />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-32 px-6 lg:px-10 bg-white/[0.02]">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-4">
+              Frequently Asked
+            </p>
+            <h2 className="text-4xl font-bold tracking-tight">FAQ</h2>
+          </div>
+
+          <div className="space-y-0">
+            {[
+              {
+                q: "What are the shipping times?",
+                a: "We ship worldwide. Standard delivery takes 5-7 business days. Express shipping is available at checkout for 2-3 business days.",
+              },
+              {
+                q: "What is your return policy?",
+                a: "We offer a 30-day hassle-free return policy. Items must be in original condition with tags attached. Visit kniowear.com for full details.",
+              },
+              {
+                q: "How do I find my size?",
+                a: "Each product page on kniowear.com includes a detailed size guide. If you're between sizes, we generally recommend sizing up for a relaxed fit.",
+              },
+              {
+                q: "Do you offer collaborations?",
+                a: "Yes! We love working with creators, artists, and brands that share our vision. Please reach out through the contact form above.",
+              },
+              {
+                q: "Where are KNIO products made?",
+                a: "Our garments are designed in-house and produced by carefully selected manufacturing partners who share our commitment to quality and ethical practices.",
+              },
+            ].map((faq) => (
+              <div key={faq.q} className="border-b border-white/10 py-8">
+                <h3 className="text-base font-medium mb-3">{faq.q}</h3>
+                <p className="text-sm font-light text-white/40 leading-relaxed">
+                  {faq.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </>
+  );
+}
+
+
+================================================================================
+FILE: src/app/globals.css
+================================================================================
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Inter", system-ui, -apple-system, sans-serif;
+  --color-brand: #000000;
+  --color-brand-light: #1a1a1a;
+  --color-accent: #8b7355;
+  --color-accent-light: #b39a78;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-600 { animation-delay: 0.6s; }
+.animation-delay-800 { animation-delay: 0.8s; }
+
+/* Letter spacing utility */
+.tracking-ultra { letter-spacing: 0.3em; }
+.tracking-wide-custom { letter-spacing: 0.15em; }
+
+/* Hover image zoom */
+.img-zoom {
+  overflow: hidden;
+}
+.img-zoom img {
+  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.img-zoom:hover img {
+  transform: scale(1.08);
+}
+
+/* Scroll line */
+@keyframes scrollLine {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.animate-scroll-line {
+  animation: scrollLine 2s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+================================================================================
+FILE: src/app/layout.tsx
+================================================================================
+
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "KNIO — Modern Fashion Brand",
+  description: "Discover KNIO — where minimalism meets bold fashion. Premium clothing designed for the modern individual. Shop the latest collections at kniowear.com",
+  keywords: ["KNIO", "fashion", "clothing", "streetwear", "luxury", "kniowear"],
+  openGraph: {
+    title: "KNIO — Modern Fashion Brand",
+    description: "Where minimalism meets bold fashion",
+    url: "https://kniowear.com",
+    siteName: "KNIO",
+    type: "website",
+  },
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="bg-black text-white antialiased font-sans selection:bg-white selection:text-black">
+        {children}
+      </body>
+    </html>
+  );
+}
+
+
+================================================================================
+FILE: src/app/page.tsx
+================================================================================
+
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import NewsletterForm from "@/components/NewsletterForm";
+import { getManagedProducts } from "@/lib/products";
+import Link from "next/link";
+
+export const dynamic = "force-dynamic";
+
+const collections = [
+  {
+    title: "Essentials",
+    subtitle: "Core Wardrobe",
+    image: "https://images.pexels.com/photos/6592254/pexels-photo-6592254.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+    href: "/collections#essentials",
+  },
+  {
+    title: "Streetwear",
+    subtitle: "Urban Edge",
+    image: "https://images.pexels.com/photos/11317811/pexels-photo-11317811.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+    href: "/collections#streetwear",
+  },
+  {
+    title: "Noir",
+    subtitle: "Dark Elegance",
+    image: "https://images.pexels.com/photos/16575981/pexels-photo-16575981.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+    href: "/collections#noir",
+  },
+  {
+    title: "Avant-Garde",
+    subtitle: "Beyond Boundaries",
+    image: "https://images.pexels.com/photos/29221325/pexels-photo-29221325.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+    href: "/collections#avant-garde",
+  },
+];
+
+const lookbook = [
+  {
+    image: "https://images.pexels.com/photos/7871152/pexels-photo-7871152.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    title: "FW26 Campaign",
+  },
+  {
+    image: "https://images.pexels.com/photos/7870748/pexels-photo-7870748.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    title: "Studio Session",
+  },
+  {
+    image: "https://images.pexels.com/photos/8427591/pexels-photo-8427591.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    title: "Dark Edition",
+  },
+];
+
+export default async function HomePage() {
+  const managedProducts = await getManagedProducts();
+  const featuredProducts = managedProducts.filter((product) => product.featured).slice(0, 4);
+
+  return (
+    <>
+      <Navbar />
+
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.pexels.com/photos/7870748/pexels-photo-7870748.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=2000"
+            alt="KNIO Fashion"
+            className="w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+          <p className="text-[11px] font-light tracking-ultra uppercase text-white/50 mb-8 animate-fade-in">
+            Fall / Winter 2026
+          </p>
+          <h1 className="text-[clamp(3.5rem,12vw,10rem)] font-bold tracking-ultra uppercase leading-[0.85] animate-fade-in-up">
+            KNIO
+          </h1>
+          <p className="mt-8 text-lg md:text-xl font-extralight tracking-wider text-white/60 max-w-xl mx-auto animate-fade-in-up animation-delay-200">
+            Where minimalism meets bold fashion
+          </p>
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up animation-delay-400">
+            <Link
+              href="/collections"
+              className="bg-white text-black px-10 py-4 text-[13px] font-medium tracking-wide-custom uppercase hover:bg-white/90 transition-all duration-300"
+            >
+              Explore Collections
+            </Link>
+            <a
+              href="https://kniowear.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-white/30 px-10 py-4 text-[13px] font-light tracking-wide-custom uppercase hover:bg-white/10 transition-all duration-300"
+            >
+              Visit Store
+            </a>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+          <span className="text-[10px] tracking-ultra uppercase text-white/30">Scroll</span>
+          <div className="w-[1px] h-10 bg-white/10 relative overflow-hidden">
+            <div className="w-full h-4 bg-white/50 animate-scroll-line" />
+          </div>
+        </div>
+      </section>
+
+      {/* Marquee Banner */}
+      <div className="bg-white text-black py-4 overflow-hidden">
+        <div className="animate-marquee whitespace-nowrap flex">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <span key={i} className="mx-8 text-[13px] font-medium tracking-ultra uppercase">
+              NEW COLLECTION AVAILABLE — SHOP AT KNIOWEAR.COM — FREE SHIPPING WORLDWIDE —
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Collections Grid */}
+      <section className="py-32 px-6 lg:px-10 max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-16">
+          <div>
+            <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-4">Discover</p>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
+              Our Collections
+            </h2>
+          </div>
+          <Link
+            href="/collections"
+            className="mt-6 md:mt-0 text-[13px] font-light tracking-wide-custom uppercase text-white/50 hover:text-white transition-colors border-b border-white/20 hover:border-white pb-1"
+          >
+            View All
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {collections.map((item, i) => (
+            <Link
+              key={item.title}
+              href={item.href}
+              className={`group relative aspect-[3/4] overflow-hidden img-zoom ${
+                i === 0 ? "animate-fade-in-up" : ""
+              }`}
+            >
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <p className="text-[10px] tracking-ultra uppercase text-white/50 mb-2">
+                  {item.subtitle}
+                </p>
+                <h3 className="text-xl font-semibold tracking-wide">
+                  {item.title}
+                </h3>
+                <div className="mt-4 flex items-center gap-2 text-[12px] tracking-wide uppercase text-white/60 group-hover:text-white transition-colors">
+                  <span>Explore</span>
+                  <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      {featuredProducts.length > 0 && (
+        <section className="pb-32 px-6 lg:px-10 max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-16">
+            <div>
+              <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-4">Curated by KNIO</p>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Featured Products</h2>
+            </div>
+            <Link
+              href="/collections#shop"
+              className="mt-6 md:mt-0 text-[13px] font-light tracking-wide-custom uppercase text-white/50 hover:text-white transition-colors border-b border-white/20 hover:border-white pb-1"
+            >
+              Shop Archive
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featuredProducts.map((product) => (
+              <a
+                key={product.id}
+                href="https://kniowear.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block"
+              >
+                <div className="aspect-[3/4] overflow-hidden img-zoom bg-white/5 mb-4">
+                  <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                </div>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-[10px] tracking-ultra uppercase text-white/35 mb-2">{product.category}</p>
+                    <h3 className="text-base font-medium group-hover:text-white/70 transition-colors">{product.name}</h3>
+                  </div>
+                  <p className="text-sm text-white/50">€{product.price}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Brand Story Section */}
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="https://images.pexels.com/photos/4862956/pexels-photo-4862956.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=1600"
+            alt="KNIO fabric texture"
+            className="w-full h-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black/70" />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-6">Our Philosophy</p>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
+                Fashion is an
+                <br />
+                <span className="text-white/40">expression,</span>
+                <br />
+                not a trend.
+              </h2>
+              <p className="mt-8 text-base font-light text-white/50 leading-relaxed max-w-md">
+                KNIO was born from the belief that clothing should speak for itself. 
+                Each piece is meticulously crafted to blend minimalism with bold expression, 
+                creating timeless garments that transcend seasons.
+              </p>
+              <Link
+                href="/about"
+                className="inline-flex items-center gap-3 mt-10 text-[13px] font-light tracking-wide-custom uppercase text-white/60 hover:text-white transition-colors group"
+              >
+                <span>Read Our Story</span>
+                <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-3 gap-8 text-center">
+              {[
+                { number: "26", label: "Collections" },
+                { number: "50+", label: "Countries" },
+                { number: "∞", label: "Possibilities" },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <p className="text-4xl md:text-5xl font-bold">{stat.number}</p>
+                  <p className="mt-2 text-[11px] tracking-ultra uppercase text-white/40">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Lookbook Section */}
+      <section className="py-32 px-6 lg:px-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-4">Visual Diary</p>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Lookbook</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {lookbook.map((item) => (
+            <div key={item.title} className="group relative aspect-[16/10] overflow-hidden img-zoom cursor-pointer">
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-500" />
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <p className="text-sm tracking-ultra uppercase font-light">{item.title}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Features Strip */}
+      <section className="border-y border-white/10 py-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            {[
+              {
+                icon: (
+                  <svg className="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
+                ),
+                title: "Free Shipping",
+                desc: "Worldwide delivery on all orders",
+              },
+              {
+                icon: (
+                  <svg className="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                ),
+                title: "Premium Quality",
+                desc: "Handcrafted with finest materials",
+              },
+              {
+                icon: (
+                  <svg className="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                ),
+                title: "Easy Returns",
+                desc: "30-day hassle-free return policy",
+              },
+            ].map((feature) => (
+              <div key={feature.title} className="flex flex-col items-center">
+                <div className="text-white/40 mb-4">{feature.icon}</div>
+                <h3 className="text-sm font-medium tracking-wide-custom uppercase mb-2">{feature.title}</h3>
+                <p className="text-sm text-white/40 font-light">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-32 px-6 lg:px-10">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-[11px] font-light tracking-ultra uppercase text-white/40 mb-4">Stay Connected</p>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+            Join the KNIO Family
+          </h2>
+          <p className="text-base font-light text-white/50 mb-10 max-w-md mx-auto">
+            Be the first to know about new collections, exclusive releases, and behind-the-scenes content.
+          </p>
+          <div className="flex justify-center">
+            <NewsletterForm />
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </>
+  );
+}
+
+
+================================================================================
+FILE: src/components/ContactForm.tsx
+================================================================================
+
+"use client";
+
+import { useState } from "react";
+
+export default function ContactForm() {
+  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [responseMsg, setResponseMsg] = useState("");
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    if (status !== "idle") setStatus("idle");
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setStatus("success");
+        setResponseMsg(data.message);
+        setForm({ name: "", email: "", subject: "", message: "" });
+      } else {
+        setStatus("error");
+        setResponseMsg(data.error);
+      }
+    } catch {
+      setStatus("error");
+      setResponseMsg("Network error. Please try again.");
+    }
+  }
+
+  const inputClasses =
+    "w-full bg-transparent border border-white/15 px-5 py-4 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-white/50 transition-colors duration-300";
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <input
+          type="text"
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          placeholder="Your Name"
+          required
+          className={inputClasses}
+        />
+        <input
+          type="email"
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          placeholder="Your Email"
+          required
+          className={inputClasses}
+        />
+      </div>
+      <select
+        name="subject"
+        value={form.subject}
+        onChange={handleChange}
+        required
+        className={`${inputClasses} ${!form.subject ? "text-white/25" : ""}`}
+      >
+        <option value="" disabled>
+          Select a Subject
+        </option>
+        <option value="General Inquiry">General Inquiry</option>
+        <option value="Order Support">Order Support</option>
+        <option value="Collaboration">Collaboration</option>
+        <option value="Press & Media">Press &amp; Media</option>
+        <option value="Other">Other</option>
+      </select>
+      <textarea
+        name="message"
+        value={form.message}
+        onChange={handleChange}
+        placeholder="Your Message"
+        required
+        rows={6}
+        className={`${inputClasses} resize-none`}
+      />
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        className="w-full sm:w-auto bg-white text-black px-12 py-4 text-[13px] font-medium tracking-wide-custom uppercase hover:bg-white/90 transition-colors duration-300 disabled:opacity-50"
+      >
+        {status === "loading" ? "Sending..." : "Send Message"}
+      </button>
+
+      {status === "success" && (
+        <p className="text-sm text-green-400 mt-2">{responseMsg}</p>
+      )}
+      {status === "error" && (
+        <p className="text-sm text-red-400 mt-2">{responseMsg}</p>
+      )}
+    </form>
+  );
+}
+
+
+================================================================================
+FILE: src/components/Footer.tsx
+================================================================================
+
+import Link from "next/link";
+
+export default function Footer() {
+  return (
+    <footer className="bg-black border-t border-white/10">
+      {/* Main Footer */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          {/* Brand */}
+          <div className="lg:col-span-1">
+            <h3 className="text-3xl font-bold tracking-ultra uppercase mb-6">KNIO</h3>
+            <p className="text-sm text-white/50 leading-relaxed max-w-xs">
+              Where minimalism meets bold fashion. Premium clothing designed for the modern individual.
+            </p>
+            <div className="flex gap-5 mt-8">
+              <a href="#" className="text-white/40 hover:text-white transition-colors" aria-label="Instagram">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                </svg>
+              </a>
+              <a href="#" className="text-white/40 hover:text-white transition-colors" aria-label="Twitter/X">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
+              <a href="#" className="text-white/40 hover:text-white transition-colors" aria-label="TikTok">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-[11px] font-semibold tracking-ultra uppercase text-white/30 mb-6">Navigate</h4>
+            <ul className="space-y-3">
+              {[
+                { href: "/", label: "Home" },
+                { href: "/collections", label: "Collections" },
+                { href: "/about", label: "About Us" },
+                { href: "/contact", label: "Contact" },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-white/50 hover:text-white transition-colors duration-300"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Help */}
+          <div>
+            <h4 className="text-[11px] font-semibold tracking-ultra uppercase text-white/30 mb-6">Help</h4>
+            <ul className="space-y-3">
+              {["Shipping & Returns", "Size Guide", "FAQ", "Privacy Policy"].map((item) => (
+                <li key={item}>
+                  <span className="text-sm text-white/50 hover:text-white transition-colors duration-300 cursor-pointer">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h4 className="text-[11px] font-semibold tracking-ultra uppercase text-white/30 mb-6">Get in Touch</h4>
+            <ul className="space-y-3 text-sm text-white/50">
+              <li>info@kniowear.com</li>
+              <li>
+                <a
+                  href="https://kniowear.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  kniowear.com
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-[11px] text-white/30 tracking-wider">
+            © {new Date().getFullYear()} KNIO. All Rights Reserved.
+          </p>
+          <p className="text-[11px] text-white/30 tracking-wider">
+            Designed with precision. Built for expression.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+
+================================================================================
+FILE: src/components/Navbar.tsx
+================================================================================
+
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/5">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo */}
+          <Link href="/" className="relative group">
+            <span className="text-2xl font-bold tracking-ultra uppercase">
+              KNIO
+            </span>
+            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white transition-all duration-500 group-hover:w-full" />
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-10">
+            {[
+              { href: "/", label: "Home" },
+              { href: "/collections", label: "Collections" },
+              { href: "/about", label: "About" },
+              { href: "/contact", label: "Contact" },
+            ].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="relative text-[13px] font-light tracking-wide-custom uppercase text-white/70 hover:text-white transition-colors duration-300 group"
+              >
+                {link.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white transition-all duration-500 group-hover:w-full" />
+              </Link>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="hidden md:flex items-center gap-6">
+            <a
+              href="https://kniowear.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[13px] font-medium tracking-wide-custom uppercase bg-white text-black px-6 py-2.5 hover:bg-white/90 transition-colors duration-300"
+            >
+              Shop Now
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden relative w-8 h-8 flex flex-col items-center justify-center gap-1.5"
+            aria-label="Toggle menu"
+          >
+            <span
+              className={`w-6 h-[1px] bg-white transition-all duration-300 ${
+                isOpen ? "rotate-45 translate-y-[4px]" : ""
+              }`}
+            />
+            <span
+              className={`w-6 h-[1px] bg-white transition-all duration-300 ${
+                isOpen ? "-rotate-45 -translate-y-[3px]" : ""
+              }`}
+            />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-500 ${
+          isOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="px-6 py-8 bg-black/95 border-t border-white/5 flex flex-col gap-6">
+          {[
+            { href: "/", label: "Home" },
+            { href: "/collections", label: "Collections" },
+            { href: "/about", label: "About" },
+            { href: "/contact", label: "Contact" },
+          ].map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-light tracking-wide-custom uppercase text-white/80 hover:text-white transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <a
+            href="https://kniowear.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block text-center text-sm font-medium tracking-wide-custom uppercase bg-white text-black px-6 py-3 mt-2"
+          >
+            Shop Now
+          </a>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+
+================================================================================
+FILE: src/components/NewsletterForm.tsx
+================================================================================
+
+"use client";
+
+import { useState } from "react";
+
+export default function NewsletterForm() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setStatus("success");
+        setMessage(data.message || "Welcome to the KNIO family!");
+        setEmail("");
+      } else {
+        setStatus("error");
+        setMessage(data.error || "Something went wrong");
+      }
+    } catch {
+      setStatus("error");
+      setMessage("Network error. Please try again.");
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="w-full max-w-md">
+      <div className="flex flex-col sm:flex-row gap-3">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (status !== "idle") setStatus("idle");
+          }}
+          placeholder="Your email address"
+          required
+          className="flex-1 bg-transparent border border-white/20 px-5 py-3.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white/60 transition-colors duration-300"
+        />
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          className="bg-white text-black px-8 py-3.5 text-[13px] font-medium tracking-wide-custom uppercase hover:bg-white/90 transition-colors duration-300 disabled:opacity-50 whitespace-nowrap"
+        >
+          {status === "loading" ? "Joining..." : "Subscribe"}
+        </button>
+      </div>
+      {status === "success" && (
+        <p className="mt-3 text-sm text-green-400">{message}</p>
+      )}
+      {status === "error" && (
+        <p className="mt-3 text-sm text-red-400">{message}</p>
+      )}
+    </form>
+  );
+}
+
+
+================================================================================
+FILE: src/components/admin/AdminLoginForm.tsx
+================================================================================
+
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+export default function AdminLoginForm() {
+  const router = useRouter();
+  const [password, setPassword] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setStatus("error");
+        setMessage(data.error || "Login failed");
+        return;
+      }
+
+      router.push("/admin");
+      router.refresh();
+    } catch {
+      setStatus("error");
+      setMessage("Network error. Please try again.");
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <label className="block text-[11px] font-medium tracking-ultra uppercase text-white/35 mb-3">
+          Admin Password
+        </label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            if (status === "error") setStatus("idle");
+          }}
+          placeholder="Enter password"
+          required
+          className="w-full bg-transparent border border-white/15 px-5 py-4 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-white/60 transition-colors"
+        />
+      </div>
+
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        className="w-full bg-white text-black px-8 py-4 text-[13px] font-medium tracking-wide-custom uppercase hover:bg-white/90 disabled:opacity-50 transition-colors"
+      >
+        {status === "loading" ? "Entering..." : "Enter Dashboard"}
+      </button>
+
+      {status === "error" && <p className="text-sm text-red-400">{message}</p>}
+    </form>
+  );
+}
+
+
+================================================================================
+FILE: src/components/admin/LogoutButton.tsx
+================================================================================
+
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+export default function LogoutButton() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  async function logout() {
+    setLoading(true);
+    await fetch("/api/admin/logout", { method: "POST" });
+    router.push("/admin/login");
+    router.refresh();
+  }
+
+  return (
+    <button
+      onClick={logout}
+      disabled={loading}
+      className="border border-white/15 px-4 py-2 text-[11px] font-medium tracking-wide-custom uppercase text-white/60 hover:text-white hover:border-white/40 disabled:opacity-50 transition-colors"
+    >
+      {loading ? "Logging out..." : "Logout"}
+    </button>
+  );
+}
+
+
+================================================================================
+FILE: src/db/index.ts
+================================================================================
+
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+
+const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+  throw new Error("DATABASE_URL is required");
+}
+
+const globalForDb = globalThis as typeof globalThis & {
+  __arenaNextJsPostgresqlPool?: Pool;
+};
+
+export const pool =
+  globalForDb.__arenaNextJsPostgresqlPool ??
+  new Pool({
+    connectionString: databaseUrl,
+  });
+
+if (process.env.NODE_ENV !== "production") {
+  globalForDb.__arenaNextJsPostgresqlPool = pool;
+}
+
+export const db = drizzle(pool);
+
+
+================================================================================
+FILE: src/db/schema.ts
+================================================================================
+
+import { pgTable, serial, text, timestamp, boolean, integer } from "drizzle-orm/pg-core";
+
+export const subscribers = pgTable("subscribers", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const contactMessages = pgTable("contact_messages", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  subject: text("subject").notNull(),
+  message: text("message").notNull(),
+  read: boolean("read").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description").notNull(),
+  price: integer("price").notNull(),
+  category: text("category").notNull(),
+  imageUrl: text("image_url").notNull(),
+  featured: boolean("featured").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+
+================================================================================
+FILE: src/lib/admin-auth.ts
+================================================================================
+
+import { cookies } from "next/headers";
+import crypto from "crypto";
+
+export const ADMIN_COOKIE_NAME = "knio_admin_session";
+const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
+
+function getAdminPassword() {
+  return process.env.ADMIN_PASSWORD || process.env.KNIO_ADMIN_PASSWORD || "";
+}
+
+function sign(value: string) {
+  const secret = getAdminPassword();
+  if (!secret) return "";
+  return crypto.createHmac("sha256", secret).update(value).digest("hex");
+}
+
+function safeEqual(a: string, b: string) {
+  const aBuffer = Buffer.from(a);
+  const bBuffer = Buffer.from(b);
+  if (aBuffer.length !== bBuffer.length) return false;
+  return crypto.timingSafeEqual(aBuffer, bBuffer);
+}
+
+export function isAdminConfigured() {
+  return Boolean(getAdminPassword());
+}
+
+export function verifyAdminPassword(password: string) {
+  const configuredPassword = getAdminPassword();
+  if (!configuredPassword || !password) return false;
+  return safeEqual(password, configuredPassword);
+}
+
+export function createAdminSessionToken() {
+  const createdAt = Date.now().toString();
+  const signature = sign(createdAt);
+  return `${createdAt}.${signature}`;
+}
+
+export function verifyAdminSessionToken(token?: string) {
+  if (!token || !isAdminConfigured()) return false;
+
+  const [createdAt, signature] = token.split(".");
+  if (!createdAt || !signature) return false;
+
+  const timestamp = Number(createdAt);
+  if (!Number.isFinite(timestamp)) return false;
+
+  const ageMs = Date.now() - timestamp;
+  if (ageMs < 0 || ageMs > SESSION_MAX_AGE_SECONDS * 1000) return false;
+
+  const expectedSignature = sign(createdAt);
+  return safeEqual(signature, expectedSignature);
+}
+
+export async function isAdminAuthenticated() {
+  const cookieStore = await cookies();
+  return verifyAdminSessionToken(cookieStore.get(ADMIN_COOKIE_NAME)?.value);
+}
+
+export const adminCookieOptions = {
+  httpOnly: true,
+  sameSite: "lax" as const,
+  secure: process.env.NODE_ENV === "production",
+  path: "/",
+  maxAge: SESSION_MAX_AGE_SECONDS,
+};
+
+
+================================================================================
+FILE: src/lib/products.ts
+================================================================================
+
+import { db } from "@/db";
+import { products } from "@/db/schema";
+import { desc } from "drizzle-orm";
+
+export const defaultProducts = [
+  {
+    name: "Essential Tee",
+    slug: "essential-tee",
+    description: "A premium everyday tee with a clean silhouette and soft structured cotton.",
+    price: 65,
+    category: "Essentials",
+    imageUrl: "https://images.pexels.com/photos/7760558/pexels-photo-7760558.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700",
+    featured: true,
+  },
+  {
+    name: "Slim Trousers",
+    slug: "slim-trousers",
+    description: "Tailored minimal trousers designed for all-day movement and timeless styling.",
+    price: 120,
+    category: "Essentials",
+    imageUrl: "https://images.pexels.com/photos/10228182/pexels-photo-10228182.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700",
+    featured: true,
+  },
+  {
+    name: "Oversized Hoodie",
+    slug: "oversized-hoodie",
+    description: "A relaxed streetwear hoodie with premium weight and an architectural drape.",
+    price: 95,
+    category: "Streetwear",
+    imageUrl: "https://images.pexels.com/photos/2081435/pexels-photo-2081435.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700",
+    featured: true,
+  },
+  {
+    name: "Cargo Pants",
+    slug: "cargo-pants",
+    description: "Utility-inspired cargo pants with clean lines, deep pockets, and a modern fit.",
+    price: 140,
+    category: "Streetwear",
+    imageUrl: "https://images.pexels.com/photos/31207606/pexels-photo-31207606.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700",
+    featured: false,
+  },
+  {
+    name: "Shadow Jacket",
+    slug: "shadow-jacket",
+    description: "A sharp black jacket with tonal detailing and a subtle statement silhouette.",
+    price: 210,
+    category: "Noir",
+    imageUrl: "https://images.pexels.com/photos/38023947/pexels-photo-38023947.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700",
+    featured: true,
+  },
+  {
+    name: "Noir Dress",
+    slug: "noir-dress",
+    description: "A refined dark dress designed for evening movement, contrast, and confidence.",
+    price: 180,
+    category: "Noir",
+    imageUrl: "https://images.pexels.com/photos/16575981/pexels-photo-16575981.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700",
+    featured: false,
+  },
+  {
+    name: "Decon Coat",
+    slug: "decon-coat",
+    description: "A deconstructed statement coat built around asymmetry and structured volume.",
+    price: 320,
+    category: "Avant-Garde",
+    imageUrl: "https://images.pexels.com/photos/10596845/pexels-photo-10596845.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700",
+    featured: false,
+  },
+  {
+    name: "Sculptural Top",
+    slug: "sculptural-top",
+    description: "An expressive top with sculptural proportions and an editorial-ready finish.",
+    price: 175,
+    category: "Avant-Garde",
+    imageUrl: "https://images.pexels.com/photos/7871152/pexels-photo-7871152.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=700",
+    featured: false,
+  },
+];
+
+export async function ensureDefaultProducts() {
+  const existing = await db.select({ id: products.id }).from(products).limit(1);
+  if (existing.length > 0) return;
+
+  await db.insert(products).values(defaultProducts).onConflictDoNothing({
+    target: products.slug,
+  });
+}
+
+export async function getManagedProducts() {
+  await ensureDefaultProducts();
+  return db.select().from(products).orderBy(desc(products.featured), desc(products.createdAt));
+}
+
